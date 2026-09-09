@@ -4,7 +4,7 @@
 
 import { boot, Stage, Loop, picker as pickerFactory, ui, quiz, audio, onPause, log, util }
   from '../../core/app.js';
-import { UNITS, UNIT_ORDER, UPGRADES, RULES } from './config.js';
+import { UNITS, UNIT_ORDER, UPGRADES, RULES, POLLUTANTS, waveDefinition } from './config.js';
 import { buildGrid, cellAt } from './grid.js';
 import { World, canUpgrade, nextUpgrade, investedIn } from './world.js';
 import { machineIcon } from './machines.js';
@@ -26,6 +26,7 @@ const stageEl = document.getElementById('stage');
 const ov = ui.overlay(document.getElementById('ovl'), document.getElementById('ovlCard'));
 const paletteEl = document.getElementById('palette');
 const panelEl = document.getElementById('twpanel');
+const wavePreviewEl = document.getElementById('wavePreview');
 const waveBar = document.getElementById('wavebar');
 const nextWaveBtn = document.getElementById('nextWave');
 const speedBtn = document.getElementById('speedBtn');
@@ -227,6 +228,45 @@ function strengthLine(t) {
 }
 const SHORT = { debris: 'debris', tss: 'solids', bod: 'BOD', path: 'pathogens', nutr: 'nutrients', metal: 'metals' };
 
+function weaknessLine(kind) {
+  const counters = UNIT_ORDER
+    .map(key => ({ key, value: UNITS[key].eff[kind] || 0 }))
+    .filter(counter => counter.value > 1)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 2)
+    .map(counter => UNITS[counter.key].short);
+  return counters.length ? counters.join(' / ') : 'general damage';
+}
+
+function paintWavePreview() {
+  if (!world) return;
+
+  const nextWave = world.wave + 1;
+  const groups = new Map();
+  for (const group of waveDefinition(nextWave)) {
+    groups.set(group.kind, (groups.get(group.kind) || 0) + group.count);
+  }
+
+  wavePreviewEl.innerHTML = `
+    <div class="wave-preview__head">
+      <span>Upcoming</span>
+      <b>Wave ${nextWave}</b>
+    </div>
+    <div class="wave-preview__list">
+      ${[...groups].map(([kind, count]) => {
+        const pollutant = POLLUTANTS[kind];
+        return `
+          <div class="wave-preview__enemy">
+            <span class="wave-preview__dot" style="background:${pollutant.col}"></span>
+            <div class="wave-preview__info">
+              <div><b>${count}x ${pollutant.short}</b></div>
+              <small>Weak to ${esc(weaknessLine(kind))}</small>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
 panel.sell.onclick = () => {
   if (!selectedTower) return;
   const back = world.sell(selectedTower);
@@ -334,6 +374,7 @@ function paintHud() {
   const pct = clamp(world.quality, 0, 100);
   hud.bar.style.width = `${pct}%`;
   hud.bar.className = pct > 60 ? '' : pct > 28 ? 'warn' : 'bad';
+  paintWavePreview();
   refreshPalette();
   if (selectedTower) {
     /* affordability of the two upgrades changes constantly during a wave */
