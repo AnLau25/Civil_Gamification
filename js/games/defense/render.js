@@ -18,7 +18,35 @@ import { roundRect, hashRand, clamp } from '../../core/util.js';
 export function drawSite(ctx, g, time) {
   const { x0, y0, width, height, cell } = g;
 
-  /* soil base, in daylight */
+  /* Full playfield ground. The inset site remains darker so the grid and
+     machine positions stay visually distinct from the surrounding bank. */
+  const field = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+  field.addColorStop(0, '#5d9b45');
+  field.addColorStop(1, '#315f2c');
+  ctx.fillStyle = field;
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  /* Keep the grass texture across the full playfield, not just the site. */
+  const fieldTufts = Math.round((ctx.canvas.width * ctx.canvas.height) / (cell * cell) * 1.2);
+  ctx.save();
+  for (let i = 0; i < fieldTufts; i++) {
+    const x = hashRand(i * 1.31 + 91) * ctx.canvas.width;
+    const y = hashRand(i * 2.77 + 137) * ctx.canvas.height;
+    const size = cell * (0.04 + hashRand(i * 4.13 + 173) * 0.04);
+    ctx.strokeStyle = hashRand(i * 5.7 + 211) > 0.55
+      ? 'rgba(210,255,140,.18)' : 'rgba(25,60,20,.16)';
+    ctx.lineWidth = Math.max(1, cell * 0.025);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + size * 0.4, y - size);
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - size * 0.3, y - size * 0.8);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  /* site base, in daylight */
   const base = ctx.createLinearGradient(0, y0, 0, y0 + height);
   base.addColorStop(0, '#4e8a3c');
   base.addColorStop(1, '#3a6d31');
@@ -48,15 +76,28 @@ export function drawSite(ctx, g, time) {
   }
   ctx.restore();
 
-  /* buildable lattice, dots rather than lines so it stays quiet */
-  ctx.fillStyle = 'rgba(255,255,255,.25)';
+  /* Always-visible placement grid. It stays light enough for machinery and
+     the channel to remain the visual focus. */
+  ctx.save();
+  roundRect(ctx, x0, y0, width, height, cell * 0.2);
+  ctx.clip();
+  ctx.strokeStyle = 'rgba(225,255,210,.20)';
+  ctx.lineWidth = Math.max(1, cell * 0.018);
   for (let c = 1; c < g.cols; c++) {
-    for (let r = 1; r < g.rows; r++) {
-      ctx.beginPath();
-      ctx.arc(x0 + c * cell, y0 + r * cell, Math.max(0.8, cell * 0.018), 0, Math.PI * 2);
-      ctx.fill();
-    }
+    const x = x0 + c * cell;
+    ctx.beginPath();
+    ctx.moveTo(x, y0);
+    ctx.lineTo(x, y0 + height);
+    ctx.stroke();
   }
+  for (let r = 1; r < g.rows; r++) {
+    const y = y0 + r * cell;
+    ctx.beginPath();
+    ctx.moveTo(x0, y);
+    ctx.lineTo(x0 + width, y);
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 /* ==========================================================================

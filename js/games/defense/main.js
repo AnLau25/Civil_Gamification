@@ -242,9 +242,9 @@ function paintWavePreview() {
   if (!world) return;
 
   const previewWave = world.inWave ? world.wave : world.wave + 1;
-  const groups = new Map();
+  const groups = new Set();
   for (const group of waveDefinition(previewWave)) {
-    groups.set(group.kind, (groups.get(group.kind) || 0) + group.count);
+    groups.add(group.kind);
   }
 
   wavePreviewEl.innerHTML = `
@@ -253,13 +253,13 @@ function paintWavePreview() {
       <b>Wave ${previewWave}</b>
     </div>
     <div class="wave-preview__list">
-      ${[...groups].map(([kind, count]) => {
+      ${[...groups].map(kind => {
         const pollutant = POLLUTANTS[kind];
         return `
           <div class="wave-preview__enemy">
             <span class="wave-preview__dot" style="background:${pollutant.col}"></span>
             <div class="wave-preview__info">
-              <div><b>${count}x ${pollutant.short}</b></div>
+              <div><b>${pollutant.short}</b></div>
               <small>Weak to ${esc(weaknessLine(kind))}</small>
             </div>
           </div>`;
