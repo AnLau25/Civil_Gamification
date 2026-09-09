@@ -1,0 +1,16 @@
+{
+  "name": "fe-arcade",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Three browser games that drill FE Civil and FE Environmental exam questions.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "validate": "node tools/validate-questions.mjs",
+    "test": "node tools/smoke-test.mjs",
+    "test:shots": "node tools/smoke-test.mjs --shots"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}

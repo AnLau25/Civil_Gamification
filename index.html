@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f6fc">
+<meta name="description" content="Three arcade games that drill FE Civil and FE Environmental exam questions.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>FE Arcade</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/quiz.css">
+<link rel="stylesheet" href="css/pages.css">
+
+<script src="js/core/protocol-check.js"></script>
+</head>
+<body>
+
+<header class="apphead right">
+  <div class="headact">
+    <button class="snd" id="sound" type="button"></button>
+    <button class="who" id="who" type="button"></button>
+  </div>
+</header>
+
+<main class="menu">
+  <h1 class="mtitle">FE&nbsp;Arcade</h1>
+  <p class="mtag">Play hard. Score high. Pass the FE.</p>
+
+  <nav class="playlist" aria-label="Games">
+
+    <a class="playbtn" href="excavator.html" data-thumb="excavator" style="--c:var(--g-exc)">
+      <span class="pb-art"><canvas class="thumb" aria-hidden="true"></canvas></span>
+      <span class="pb-body">
+        <span class="pb-txt">
+          <b>Excavator Run</b>
+          <small>Jump the jobsite. One wrong answer ends the run.</small>
+        </span>
+        <span class="pb-foot">
+          <span class="pb-best hidden" data-best="excavator"></span>
+          <span class="pb-go">Play &#9656;</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="playbtn" href="dig.html" data-thumb="miner" style="--c:var(--g-dig)">
+      <span class="pb-art"><canvas class="thumb" aria-hidden="true"></canvas></span>
+      <span class="pb-body">
+        <span class="pb-txt">
+          <b>Gold Miner</b>
+          <small>Swing the claw, beat the shift quota.</small>
+        </span>
+        <span class="pb-foot">
+          <span class="pb-best hidden" data-best="dig"></span>
+          <span class="pb-go">Play &#9656;</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="playbtn" href="defense.html" data-thumb="defense" style="--c:var(--g-def)">
+      <span class="pb-art"><canvas class="thumb" aria-hidden="true"></canvas></span>
+      <span class="pb-body">
+        <span class="pb-txt">
+          <b>Watershed Defense</b>
+          <small>Build the treatment train, hold the river.</small>
+        </span>
+        <span class="pb-foot">
+          <span class="pb-best hidden" data-best="defense"></span>
+          <span class="pb-go">Play &#9656;</span>
+        </span>
+      </span>
+    </a>
+
+  </nav>
+
+  <div class="menugrid">
+    <button class="mbtn" type="button" data-open="tutorial"><i class="ic-exc"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z" fill="currentColor" stroke="none"/></svg></i> How to play</button>
+    <button class="mbtn" type="button" data-open="board"><i class="ic-dig"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.4M17 6h2.5a2.5 2.5 0 0 1-2.6 3.4"/><path d="M12 14v3M8.5 20h7M10 20v-3h4v3" /></svg></i> Leaderboard</button>
+    <button class="mbtn" type="button" data-open="about"><i class="ic-acc"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.6" r="1.15" fill="currentColor" stroke="none"/></svg></i> About</button>
+    <button class="mbtn" type="button" data-open="progress"><i class="ic-def"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M6.5 19v-6M11 19V8M15.5 19v-9M20 19V5" /></svg></i> My progress</button>
+  </div>
+</main>
+
+<!-- ==========================================================================
+     Sheets: centred dialogs over a dimmed backdrop. Closed by the X, the Main
+     Menu button, the Escape key or a click outside the panel. They live in the
+     page rather than in separate files so opening one is instant.
+     ========================================================================== -->
+
+<section class="sheet hidden" id="sheet-tutorial" aria-labelledby="ttl-tutorial" role="dialog" aria-modal="true">
+  <div class="sheetpanel">
+  <div class="sheethead">
+    <h2 id="ttl-tutorial">How to play</h2>
+    <button class="sheetx" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="sheetbody">
+    <div class="sheetinner">
+
+      <div class="block" style="--c:var(--g-exc)">
+        <h3><span class="dot"></span> Excavator Run</h3>
+        <div class="keys"><span>Tap anywhere to jump</span><span>Space bar</span></div>
+        <p>The excavator runs by itself and speeds up as you go. Jump the barriers, the pipes and
+          the cones. Clip one and a question stops you cold.</p>
+        <p><b>Right answer</b> and you carry on with a bigger streak multiplier.
+          <b>Wrong answer</b> ends the run. Three correct in a row earns a 50/50 you can spend
+          on a question that has you stuck.</p>
+      </div>
+
+      <div class="block" style="--c:var(--g-dig)">
+        <h3><span class="dot"></span> Gold Miner</h3>
+        <div class="keys"><span>Tap to drop the claw</span><span>Space bar</span></div>
+        <p>The claw swings over the shaft. Drop it at the right moment and it hauls back whatever
+          it grabs. Heavy things come back slowly, so a boulder can eat half your shift while
+          the diamond you wanted sits there.</p>
+        <p>Hit the money quota before the clock runs out. Between shifts you work the payroll:
+          every question you get right grows the pot, one wrong answer wipes whatever you have
+          not banked. Banked money buys dynamite, a strength drink and the rest.</p>
+      </div>
+
+      <div class="block" style="--c:var(--g-def)">
+        <h3><span class="dot"></span> Watershed Defense</h3>
+        <div class="keys"><span>Tap a unit, then tap the ground</span><span>Tap a unit to upgrade</span></div>
+        <p>Contaminants flow down the channel toward the river. Each treatment unit only works on
+          what it actually treats, so a bar screen will not touch dissolved metal and UV will not
+          settle grit. Read what is coming, then build for it.</p>
+        <p>Every unit has <b>two upgrade paths of three tiers</b>, and only one path can go past
+          tier one, so each build is a real decision. Grant questions between waves pay for it.</p>
+      </div>
+
+      <div class="block">
+        <h3><span class="dot"></span> How the questions work</h3>
+        <ol class="steps">
+          <li><b>Set a name once.</b> It follows you across all three games and puts you on the board.</li>
+          <li><b>Filter by topic.</b> Every game lets you drill Statics, Water and Wastewater,
+            Geotech or whatever is hurting, on either exam track.</li>
+          <li><b>Questions repeat on purpose.</b> Anything you miss comes back sooner. Anything you
+            answer correctly three times running fades out.</li>
+          <li><b>Read the explanation.</b> The short paragraph after each answer is where the marks
+            actually come from.</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+  <div class="sheetfoot">
+    <button class="btn btn-menu" type="button" data-close>&#8249; Main Menu</button>
+  </div>
+  </div>
+</section>
+
+<section class="sheet hidden" id="sheet-board" aria-labelledby="ttl-board" role="dialog" aria-modal="true">
+  <div class="sheetpanel">
+  <div class="sheethead">
+    <h2 id="ttl-board">Leaderboard</h2>
+    <button class="sheetx" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="sheetbody">
+    <div class="sheetinner">
+      <div class="tabs" id="tabs"></div>
+      <div class="board" id="board"></div>
+      <p class="hint" style="text-align:left">Scores are kept in this browser on this device.
+        Your own row is highlighted.</p>
+    </div>
+  </div>
+  <div class="sheetfoot">
+    <button class="btn btn-menu" type="button" data-close>&#8249; Main Menu</button>
+  </div>
+  </div>
+</section>
+
+<section class="sheet hidden" id="sheet-about" aria-labelledby="ttl-about" role="dialog" aria-modal="true">
+  <div class="sheetpanel">
+  <div class="sheethead">
+    <h2 id="ttl-about">About</h2>
+    <button class="sheetx" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="sheetbody">
+    <div class="sheetinner">
+
+      <div class="factgrid" id="facts"></div>
+
+      <div class="block">
+        <h3><span class="dot"></span> FE Arcade</h3>
+        <p>Three arcade games that quiz you on FE Civil and FE Environmental material while you
+          play. A round takes two to five minutes.</p>
+        <p id="bankNote"></p>
+      </div>
+
+    </div>
+  </div>
+  <div class="sheetfoot">
+    <button class="btn btn-menu" type="button" data-close>&#8249; Main Menu</button>
+  </div>
+  </div>
+</section>
+
+
+<section class="sheet hidden" id="sheet-progress" aria-labelledby="ttl-progress" role="dialog" aria-modal="true">
+  <div class="sheetpanel">
+  <div class="sheethead">
+    <h2 id="ttl-progress">My progress</h2>
+    <button class="sheetx" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="sheetbody">
+    <div class="sheetinner">
+
+      <div class="sum" id="sum"></div>
+
+      <h3 class="ph">Accuracy by topic</h3>
+      <div class="panel" id="mastery"></div>
+
+      <h3 class="ph">Best scores</h3>
+      <div class="panel" id="bests"></div>
+
+      <h3 class="ph">Export</h3>
+      <div class="panel">
+        <p class="note" style="margin:0 0 12px">One row per answer: question id, topic, difficulty,
+          correct or not, and time taken.</p>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="dl" type="button">Download CSV</button>
+          <button class="btn btn-ghost" id="reset" type="button">Reset my data</button>
+        </div>
+        <p class="note" id="evcount"></p>
+      </div>
+
+    </div>
+  </div>
+  <div class="sheetfoot">
+    <button class="btn btn-menu" type="button" data-close>&#8249; Main Menu</button>
+  </div>
+  </div>
+</section>
+
+<div id="fileProtocolWarning"></div>
+
+<script type="module" src="js/pages/hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Cloudflare Worker for the shared class leaderboard.
+#
+#   npm install -g wrangler
+#   wrangler login
+#   wrangler kv namespace create SCORES     # paste the returned id below
+#   wrangler deploy
+#
+# Then put the deployed URL into js/core/config.js as apiBase.
+#
+# Why Cloudflare: the free tier covers a class many times over, there is no
+# server to keep alive, and nothing accrues between semesters.
+
+name = "fe-arcade"
+main = "index.js"
+compatibility_date = "2026-01-01"
+
+[[kv_namespaces]]
+binding = "SCORES"
+id = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"

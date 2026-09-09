@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="Excavator Run: jump the jobsite and answer FE exam questions to keep the streak alive.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Excavator Run | FE Arcade</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/quiz.css">
+<link rel="stylesheet" href="css/games/excavator.css">
+
+<script src="js/core/protocol-check.js"></script>
+</head>
+<body>
+
+<div class="shell">
+  <header class="topbar">
+    <a class="back" href="index.html" aria-label="Quit to the main menu">&#8249;<span class="bktxt">Quit</span></a>
+    <div class="ttl">Excavator Run</div>
+    <button class="hlp" id="help" type="button" aria-label="How to play">?</button>
+    <button class="snd" id="sound" type="button"></button>
+    <button class="who" id="who" type="button"></button>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="game" class="gamecanvas" aria-label="Excavator running game"></canvas>
+
+    <div class="hud">
+      <div class="grp">
+        <div class="pill">
+          <span class="k">Score</span>
+          <span class="v" id="scoreEl">0<small id="bestEl">best 0</small></span>
+        </div>
+      </div>
+      <div class="grp">
+        <div class="pill right good"><span class="k">Cleared</span><span class="v" id="clearedEl">0</span></div>
+      </div>
+    </div>
+
+    <div class="combo off" id="comboEl">Streak</div>
+    <button class="fifty hidden" id="fiftyEl" type="button">50/50 x0</button>
+    <div class="tapcue hidden" id="tapcue">TAP TO JUMP</div>
+
+    <div class="overlay" id="ovl"><div class="card" id="ovlCard"></div></div>
+  </div>
+</div>
+
+<div id="fileProtocolWarning"></div>
+
+<script type="module" src="js/games/excavator/main.js"></script>
+</body>
+</html>

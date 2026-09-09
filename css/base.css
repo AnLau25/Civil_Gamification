@@ -1,0 +1,170 @@
+/* ==========================================================================
+   base.css — design tokens, reset, typography
+
+   Colour system, four roles so nothing competes:
+     INDIGO  navigation, selection, focus
+     GREEN   actions and anything correct
+     AMBER   value, score, streaks, achievement
+     RED     failure
+
+   The three games each own one accent as well, so a card, a badge and the
+   game itself always agree on what colour that game is.
+
+   Two surface families share these tokens. The dark set below dresses the
+   game pages. `pages.css` overrides the same names with a light set for the
+   menu and the progress page, which is why nothing outside these two files
+   hardcodes a surface colour.
+   ========================================================================== */
+
+:root {
+  /* Tells the browser to render native widgets (select popups, scrollbars,
+     date pickers) with a dark theme. Without this, an option list on Windows
+     renders white on white against the inherited light text colour. */
+  color-scheme: dark;
+
+  /* surfaces: a deep indigo slate, warmer and less flat than pure navy */
+  --bg:        #0d1326;
+  --bg-deep:   #070b18;
+  --surface:   #151d36;
+  --surface2:  #1e2846;
+  --surface3:  #2a3660;
+  --line:      rgba(255, 255, 255, .12);
+  --line2:     rgba(255, 255, 255, .22);
+
+  /* text */
+  --text:      #eef1fa;
+  --muted:     #a6b0c8;
+  --muted2:    #7f8aa3;
+
+  /* indigo: selection, tabs, links, focus rings */
+  --accent:    #5b57f0;
+  --accent2:   #a5a8ff;
+  --accent-rgb: 91, 87, 240;
+
+  /* green: primary actions and correct answers */
+  --action:    #12a150;
+  --action-hi: #16b95c;
+  --good:      #22c55e;
+  --good2:     #6ee7a0;
+
+  /* amber: score, streak, reward */
+  --gold:      #f2b01e;
+  --gold2:     #ffd77a;
+
+  --bad:       #ef4444;
+  --bad2:      #ff9095;
+
+  /* one accent per game, used by the menu cards and badges */
+  --g-exc:     #ff7a1a;
+  --g-dig:     #f2b01e;
+  --g-def:     #12b5a6;
+
+  /* geometry */
+  --tap:  46px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  /* elevation */
+  --sh-card:  0 18px 44px rgba(2, 12, 32, .55);
+  --sh-modal: 0 26px 64px rgba(2, 12, 32, .7);
+  --sh-soft:  0 4px 14px rgba(2, 12, 32, .35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea { font-family: inherit; }
+a { color: var(--accent2); }
+
+/* Pages that ARE a game: lock the viewport, no scroll, no rubber banding. */
+body.gamepage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  /* A mid blue rather than near black: bright enough to feel like daytime,
+     dark enough that the white topbar text still reads. Each game sheet
+     overrides this with a gradient tuned to its own scene. */
+  background: #2c4a74;
+}
+
+/* Pages that scroll normally (hub, progress). Their light palette and their
+   background live in pages.css, next to the components that use them. */
+body.docpage {
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.center { text-align: center; }
+.hidden { display: none !important; }
+
+.kicker {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+
+.hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Shown only when the site is opened straight off the disk, where ES modules
+   are blocked by the browser. js/core/protocol-check.js reveals it.
+   ========================================================================== */
+#fileProtocolWarning {
+  display: none;
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 22px;
+  border: 1px solid var(--line2);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+#fileProtocolWarning h2 { margin: 0 0 10px; font-size: 18px; color: #fff; }
+#fileProtocolWarning code {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .10);
+  color: var(--gold2);
+  font-size: 13px;
+}
+#fileProtocolWarning pre {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, .35);
+  color: var(--text);
+  font-size: 13px;
+  overflow-x: auto;
+}

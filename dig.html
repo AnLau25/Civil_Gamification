@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="Gold Miner: swing the claw, haul the load, answer FE exam questions to fund the shift.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Gold Miner | FE Arcade</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/quiz.css">
+<link rel="stylesheet" href="css/games/dig.css">
+
+<script src="js/core/protocol-check.js"></script>
+</head>
+<body>
+
+<div class="shell">
+  <header class="topbar">
+    <a class="back" href="index.html" aria-label="Quit to the main menu">&#8249;<span class="bktxt">Quit</span></a>
+    <div class="ttl">Gold Miner</div>
+    <button class="hlp" id="help" type="button" aria-label="How to play">?</button>
+    <button class="snd" id="sound" type="button"></button>
+    <button class="who" id="who" type="button"></button>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="game" class="gamecanvas" aria-label="Gold miner claw game"></canvas>
+
+    <div class="hud">
+      <div class="grp">
+        <div class="pill"><span class="k">Level</span><span class="v" id="lvlEl">1</span></div>
+        <div class="pill good"><span class="k">Banked</span><span class="v" id="cashEl">$0</span></div>
+      </div>
+      <div class="grp">
+        <div class="pill right bad"><span class="k">Time</span><span class="v" id="timeEl">—</span></div>
+        <div class="pill right">
+          <span class="k">Quota</span><span class="v" id="goalEl">—</span>
+          <div class="metre"><i id="goalBar"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <button id="tntBtn" class="hidden" type="button" aria-label="Use dynamite on the load">🧨 0</button>
+
+    <div class="overlay" id="ovl"><div class="card wide" id="ovlCard"></div></div>
+  </div>
+</div>
+
+<div id="fileProtocolWarning"></div>
+
+<script type="module" src="js/games/goldminer/main.js"></script>
+</body>
+</html>

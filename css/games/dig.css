@@ -1,0 +1,121 @@
+/* ==========================================================================
+   dig.css — Gold Miner
+   ========================================================================== */
+
+/* Dusk over the dig site: the surround picks up the purple of the in-game
+   sky so the two read as one evening. */
+body.gamepage { background: linear-gradient(180deg, #5a5480 0%, #35406b 100%); }
+#stage { background: #1a2440; }
+
+/* --------------------------------------------------------------------------
+   Dynamite button, thumb reachable in the bottom right
+   -------------------------------------------------------------------------- */
+#tntBtn {
+  position: absolute;
+  right: 12px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 6;
+  min-width: 68px;
+  min-height: 54px;
+  padding: 8px 14px;
+  border: 1px solid rgba(230, 205, 150, .55);
+  border-radius: 14px;
+  background: rgba(9, 15, 29, .92);
+  color: #fdba74;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  backdrop-filter: blur(6px);
+  transition: transform .06s ease, opacity .15s ease;
+}
+#tntBtn:active:not(:disabled) { transform: scale(.94); }
+#tntBtn:disabled { opacity: .32; }
+
+/* --------------------------------------------------------------------------
+   Payroll pot
+   -------------------------------------------------------------------------- */
+/* The pot is the one number this screen exists for, so it sits on a bright
+   card of its own where it cannot be missed. */
+.potbox {
+  margin: 0 0 16px;
+  padding: 18px 14px 16px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(170deg, #fff7e0 0%, #ffe9b3 100%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .35);
+  text-align: center;
+}
+.potbox .lbl {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9a6b08;
+}
+.potbox .amt {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: #241703;
+  font-variant-numeric: tabular-nums;
+}
+.potbox .nxt { margin-top: 3px; font-size: 13.5px; color: #6b5423; }
+.potbox .nxt b { color: #0b7a43; font-weight: 800; }
+.potbox.busted { background: linear-gradient(170deg, #ffe4e4 0%, #ffc9c9 100%); }
+.potbox.busted .lbl { color: #b91c1c; }
+.potbox.busted .amt { color: #7f1d1d; }
+.potbox.busted .nxt { color: #8c4a4a; }
+
+/* --------------------------------------------------------------------------
+   Shop
+   -------------------------------------------------------------------------- */
+.shopgrid { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 0 0 16px; }
+@media (min-width: 520px) { .shopgrid { grid-template-columns: 1fr 1fr; } }
+
+.shopitem {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, .05);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color .12s ease, background .12s ease, transform .06s ease;
+}
+.shopitem:active:not(:disabled) { transform: scale(.985); }
+.shopitem:hover:not(:disabled) { border-color: var(--accent); background: rgba(91, 87, 240, .18); }
+.shopitem:disabled { opacity: .4; cursor: not-allowed; }
+.shopitem .ttl {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #fff;
+}
+.shopitem .ttl .own { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--muted); }
+.shopitem .dsc { margin: 5px 0 7px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+.shopitem .prc { font-size: 13px; font-weight: 800; color: var(--good2); }
+.shopitem.owned .prc { color: var(--muted); }
+
+/* --------------------------------------------------------------------------
+   Haul summary after a shift
+   -------------------------------------------------------------------------- */
+.haul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.haulitem {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .05);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.haulitem b { color: #fff; font-weight: 800; }
+.haulitem i { color: var(--gold); font-style: normal; font-weight: 700; }

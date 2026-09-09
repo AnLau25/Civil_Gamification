@@ -1,0 +1,183 @@
+/* ==========================================================================
+   layout.css — the app shell (topbar + stage) and the scrolling doc pages
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Game shell: sized to the real visible viewport, never scrolls
+   -------------------------------------------------------------------------- */
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.topbar {
+  flex: 0 0 auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 0 4px;
+}
+.topbar .back {
+  flex: 0 0 auto;
+  min-width: var(--tap);
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 13px 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+.topbar .back .bktxt { font-size: 12.5px; font-weight: 700; letter-spacing: .2px; }
+.topbar .back:hover { color: #fff; border-color: var(--line2); }
+.topbar .back:active { background: rgba(255, 255, 255, .14); color: #fff; }
+
+.topbar .hlp {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .30);
+}
+.topbar .hlp:hover { filter: brightness(1.12); }
+.topbar .hlp:active { transform: scale(.95); }
+
+.topbar .ttl {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar .who {
+  flex: 0 0 auto;
+  max-width: 42vw;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.topbar .who:active { background: rgba(255, 255, 255, .14); }
+.topbar .who b { color: var(--text); font-weight: 700; }
+
+.topbar .snd {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.topbar .snd:active { background: rgba(255, 255, 255, .16); }
+.topbar .snd[data-state="off"] { opacity: .5; }
+.topbar .snd[data-state="full"] { border-color: var(--action); background: rgba(18, 161, 80, .28); }
+
+.stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+canvas.gamecanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* Roomier once there is desk space, still no page scroll. */
+@media (min-width: 860px) and (min-height: 600px) {
+  .shell {
+    max-width: 1360px;
+    margin: 0 auto;
+    justify-content: center;
+    padding: 0 20px 20px;
+  }
+  .topbar { height: 60px; padding: 0 4px; }
+  .topbar .ttl { font-size: 17px; }
+  .stage {
+    flex: 0 1 auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: calc(100dvh - 96px);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Doc pages: hub and progress. These scroll.
+   -------------------------------------------------------------------------- */
+.doc {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(20px + env(safe-area-inset-top)) 16px calc(48px + env(safe-area-inset-bottom));
+}
+.doc h1 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -.4px; color: #fff; }
+.doc h2 { margin: 30px 0 12px; font-size: 17px; font-weight: 800; color: #fff; }
+.doc p.sub { margin: 0 0 22px; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+.doc .note { margin: 14px 0 0; font-size: 12px; line-height: 1.6; color: var(--muted); }
+
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+}
