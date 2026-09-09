@@ -13,7 +13,8 @@ const PAD_BOTTOM = 122; // clears the build palette and the wave bar
 const MAX_LANES = 3;
 
 export function buildGrid(stage) {
-  const availW = stage.W - 12;
+  /* Reserve side banks for scenery so trees are not hidden behind the site. */
+  const availW = Math.min(stage.W - 12, Math.max(stage.W - 132, stage.W * 0.70));
   const availH = Math.max(stage.H * 0.5, stage.H - PAD_TOP - PAD_BOTTOM);
 
   const aim = 52;

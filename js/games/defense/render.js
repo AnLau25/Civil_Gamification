@@ -46,6 +46,48 @@ export function drawSite(ctx, g, time) {
   }
   ctx.restore();
 
+  /* Seeded random positions keep the side groves lively but repeatable. */
+  const treeSize = cell * 0.50;
+  const treeTarget = 100;
+  let treeIndex = 0;
+  const placeTree = (treeX, treeY, size) => {
+    if (treeX < -treeSize || treeX > ctx.canvas.width + treeSize ||
+        treeY < -treeSize || treeY > ctx.canvas.height + treeSize) return;
+    drawTree(ctx, treeX, treeY, size, treeIndex++);
+  };
+
+  const leftMinX = treeSize;
+  const leftMaxX = x0 - treeSize;
+  const rightMinX = x0 + width + treeSize;
+  const rightMaxX = ctx.canvas.width - treeSize - 200;
+  if (leftMaxX >= leftMinX && rightMaxX >= rightMinX) {
+    const minY = treeSize;
+    const maxY = ctx.canvas.height - treeSize;
+    const bandHeight = (maxY - minY) / treeTarget;
+    for (let i = 0; i < treeTarget; i++) {
+      const treeSeed = 503 + i * 2.17;
+      const jitter = (hashRand(treeSeed + 3.41) - 0.5) * bandHeight * 0.18;
+      const treeY = minY + (i + 0.5) * bandHeight + jitter;
+      const size = cell * (0.40 + hashRand(treeSeed + 4.73) * 0.14);
+      const leftX = leftMinX + hashRand(treeSeed + 7.11) * (leftMaxX - leftMinX);
+      const rightX = rightMinX + hashRand(treeSeed + 9.23) * (rightMaxX - rightMinX);
+      placeTree(leftX, treeY, size);
+      placeTree(rightX, treeY, size);
+    }
+  }
+
+  /* A low row gives the foreground some depth; no matching row is drawn at
+     the top, where the HUD and preview need clean space. */
+  const bottomTarget = 10;
+  const bottomY = Math.min(ctx.canvas.height - treeSize, y0 + height + treeSize * 1.35);
+  const bottomSpan = ctx.canvas.width - treeSize * 2;
+  for (let i = 0; i < bottomTarget; i++) {
+    const bottomX = treeSize + (i + 0.5) * bottomSpan / bottomTarget;
+    const jitter = (hashRand(901 + i * 2.61) - 0.5) * bottomSpan / bottomTarget * 0.42;
+    const size = cell * (0.40 + hashRand(933 + i * 3.17) * 0.14);
+    placeTree(bottomX + jitter, bottomY, size);
+  }
+
   /* site base, in daylight */
   const base = ctx.createLinearGradient(0, y0, 0, y0 + height);
   base.addColorStop(0, '#4e8a3c');
@@ -96,6 +138,57 @@ export function drawSite(ctx, g, time) {
     ctx.moveTo(x0, y);
     ctx.lineTo(x0 + width, y);
     ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawTree(ctx, x, y, size, seed) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  ctx.fillStyle = 'rgba(20,55,25,.24)';
+  ctx.beginPath();
+  ctx.ellipse(0, size * 0.42, size * 0.55, size * 0.16, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#65452b';
+  roundRect(ctx, -size * 0.10, size * 0.02, size * 0.20, size * 0.48, size * 0.05);
+  ctx.fill();
+
+  const pine = hashRand(seed * 7.1) > 0.56;
+  if (pine) {
+    ctx.fillStyle = '#285d35';
+    for (let i = 0; i < 3; i++) {
+      const top = -size * (0.62 - i * 0.16);
+      const base = -size * (0.02 + i * 0.12);
+      const halfWidth = size * (0.18 + i * 0.10);
+      ctx.beginPath();
+      ctx.moveTo(0, top);
+      ctx.lineTo(-halfWidth, base);
+      ctx.lineTo(halfWidth, base);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(151,214,92,.24)';
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.06, -size * 0.48);
+    ctx.lineTo(-size * 0.01, -size * 0.57);
+    ctx.lineTo(size * 0.08, -size * 0.42);
+    ctx.closePath();
+    ctx.fill();
+  } else {
+    const canopy = hashRand(seed * 7.1) > 0.5 ? '#2f6f35' : '#397d3d';
+    ctx.fillStyle = canopy;
+    for (let i = 0; i < 3; i++) {
+      const offset = (i - 1) * size * 0.22;
+      ctx.beginPath();
+      ctx.arc(offset, -size * (0.18 + (i % 2) * 0.10), size * 0.29, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(151,214,92,.28)';
+    ctx.beginPath();
+    ctx.arc(-size * 0.16, -size * 0.30, size * 0.12, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.restore();
 }
