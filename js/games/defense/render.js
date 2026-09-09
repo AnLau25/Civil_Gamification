@@ -48,7 +48,6 @@ export function drawSite(ctx, g, time) {
 
   /* Seeded random positions keep the side groves lively but repeatable. */
   const treeSize = cell * 0.50;
-  const treeTarget = 100;
   let treeIndex = 0;
   const placeTree = (treeX, treeY, size) => {
     if (treeX < -treeSize || treeX > ctx.canvas.width + treeSize ||
@@ -56,37 +55,40 @@ export function drawSite(ctx, g, time) {
     drawTree(ctx, treeX, treeY, size, treeIndex++);
   };
 
-  const leftMinX = treeSize;
-  const leftMaxX = x0 - treeSize;
-  const rightMinX = x0 + width + treeSize;
-  const rightMaxX = ctx.canvas.width - treeSize - 200;
-  if (leftMaxX >= leftMinX && rightMaxX >= rightMinX) {
-    const minY = treeSize;
-    const maxY = ctx.canvas.height - treeSize;
-    const bandHeight = (maxY - minY) / treeTarget;
-    for (let i = 0; i < treeTarget; i++) {
-      const treeSeed = 503 + i * 2.17;
-      const jitter = (hashRand(treeSeed + 3.41) - 0.5) * bandHeight * 0.18;
-      const treeY = minY + (i + 0.5) * bandHeight + jitter;
-      const size = cell * (0.40 + hashRand(treeSeed + 4.73) * 0.14);
-      const leftX = leftMinX + hashRand(treeSeed + 7.11) * (leftMaxX - leftMinX);
-      const rightX = rightMinX + hashRand(treeSeed + 9.23) * (rightMaxX - rightMinX);
-      placeTree(leftX, treeY, size);
-      placeTree(rightX, treeY, size);
+  /* Perimeter rows put trees all around the site while leaving the grid clear. */
+  const margin = treeSize * 1.35;
+  const topY = Math.max(treeSize, y0 - margin);
+  const bottomY = Math.min(ctx.canvas.height - treeSize, y0 + height + margin);
+  const topCount = Math.max(14, Math.floor(width / (cell * 2.5)));
+  const bottomCount = Math.max(14, topCount + 2);
+  const sideCount = Math.max(80, Math.floor(height / (cell * 2.2)));
+  const horizontalSpan = ctx.canvas.width - treeSize * 2;
+  const verticalSpan = ctx.canvas.height - treeSize * 2;
+  const placeRandomBand = (count, seed, positionTree) => {
+    const segment = 1 / count;
+    for (let i = 0; i < count; i++) {
+      const u = i * segment + hashRand(seed + i * 2.17) * segment;
+      const size = cell * (0.40 + hashRand(seed + i * 3.1 + 17) * 0.14);
+      positionTree(u, size, i);
     }
-  }
+  };
 
-  /* A low row gives the foreground some depth; no matching row is drawn at
-     the top, where the HUD and preview need clean space. */
-  const bottomTarget = 10;
-  const bottomY = Math.min(ctx.canvas.height - treeSize, y0 + height + treeSize * 1.35);
-  const bottomSpan = ctx.canvas.width - treeSize * 2;
-  for (let i = 0; i < bottomTarget; i++) {
-    const bottomX = treeSize + (i + 0.5) * bottomSpan / bottomTarget;
-    const jitter = (hashRand(901 + i * 2.61) - 0.5) * bottomSpan / bottomTarget * 0.42;
-    const size = cell * (0.40 + hashRand(933 + i * 3.17) * 0.14);
-    placeTree(bottomX + jitter, bottomY, size);
-  }
+  placeRandomBand(topCount, 503, (u, size) => {
+    placeTree(treeSize + u * horizontalSpan, topY, size);
+  });
+  placeRandomBand(bottomCount, 601, (u, size) => {
+    placeTree(treeSize + u * horizontalSpan, bottomY, size);
+  });
+  const leftSideSpan = Math.max(0, x0 - margin - treeSize);
+  const rightSideStart = x0 + width + margin;
+  const rightSideSpan = Math.max(0, ctx.canvas.width - treeSize - rightSideStart - 300);
+  placeRandomBand(sideCount, 701, (u, size, i) => {
+    const y = treeSize + u * verticalSpan;
+    const leftX = treeSize + hashRand(811 + i * 2.41) * leftSideSpan;
+    const rightX = rightSideStart + hashRand(877 + i * 2.41) * rightSideSpan;
+    placeTree(leftX, y, size);
+    placeTree(rightX, y, size);
+  });
 
   /* site base, in daylight */
   const base = ctx.createLinearGradient(0, y0, 0, y0 + height);
