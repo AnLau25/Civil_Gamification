@@ -41,7 +41,7 @@ export const UNITS = {
   },
   grit: {
     name: 'Grit chamber', short: 'Grit', machine: 'grit',
-    col: '#4bb3e8', col2: '#0f5f92', accent: '#bfe6ff', cost: 95,
+    col: '#634be8', col2: '#0f5f92', accent: '#bfe6ff', cost: 95,
     dmg: 0, rate: 0, range: 2.1, slow: 0.45, fx: 'none',
     eff: {},
     dsc: 'Drops the channel velocity so grit falls out of suspension. No damage at all, but everything inside it crawls, which multiplies every other unit you own.'

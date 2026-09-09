@@ -368,6 +368,26 @@ export function drawRange(ctx, g, world, tower) {
   ctx.setLineDash([]);
 }
 
+export function drawCoverage(ctx, g, tower) {
+  const spec = UNITS[tower.type];
+  const p = cellCenter(g, tower.c, tower.r);
+  const r = (tower.stats?.range ?? spec.range) * g.cell;
+
+  ctx.save();
+  ctx.globalAlpha = 0.16;
+  ctx.fillStyle = spec.col;
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 0.48;
+  ctx.strokeStyle = spec.col;
+  ctx.lineWidth = Math.max(1.5, g.cell * 0.025);
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
 /* ==========================================================================
    Treatment units
    ========================================================================== */

@@ -10,7 +10,7 @@ import { World, canUpgrade, nextUpgrade, investedIn } from './world.js';
 import { machineIcon } from './machines.js';
 import {
   drawSite, drawChannel, drawBuildHints, drawRange,
-  drawTower, drawEnemy, drawEffects, drawDamageVignette
+  drawCoverage, drawTower, drawEnemy, drawEffects, drawDamageVignette
 } from './render.js';
 import { showTitle, showGrantRound, askConsentOrder, helpHtml } from './screens.js';
 
@@ -410,6 +410,7 @@ function render() {
 
   if (world) {
     drawBuildHints(ctx, grid, world, selectedType, hoverCell);
+    for (const t of world.towers) drawCoverage(ctx, grid, t);
     if (selectedTower) drawRange(ctx, grid, world, selectedTower);
     for (const t of world.towers) drawTower(ctx, grid, t, clock, t === selectedTower);
     drawEffects(ctx, grid, world.effects);
