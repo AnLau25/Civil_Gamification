@@ -241,16 +241,16 @@ function weaknessLine(kind) {
 function paintWavePreview() {
   if (!world) return;
 
-  const nextWave = world.wave + 1;
+  const previewWave = world.inWave ? world.wave : world.wave + 1;
   const groups = new Map();
-  for (const group of waveDefinition(nextWave)) {
+  for (const group of waveDefinition(previewWave)) {
     groups.set(group.kind, (groups.get(group.kind) || 0) + group.count);
   }
 
   wavePreviewEl.innerHTML = `
     <div class="wave-preview__head">
-      <span>Upcoming</span>
-      <b>Wave ${nextWave}</b>
+      <span>${world.inWave ? 'Current wave' : 'Next wave'}</span>
+      <b>Wave ${previewWave}</b>
     </div>
     <div class="wave-preview__list">
       ${[...groups].map(([kind, count]) => {
